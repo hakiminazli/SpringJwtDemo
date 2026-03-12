@@ -1,0 +1,127 @@
+{
+  "info": {
+    "_postman_id": "d2cafbae-7895-42e6-a14f-6edd531bc211",
+    "name": "Spring Boot JWT Demo",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49635272",
+    "_collection_link": "https://go.postman.co/collection/49635272-d2cafbae-7895-42e6-a14f-6edd531bc211?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "jwt-demo-login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"username\": \"hakimin\",\r\n  \"password\": \"password123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/auth/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "jwt-demo-api-user",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer eyJhbGciOiJIUzM4NCJ9.eyJyb2xlcyI6WyJST0xFXyQyYSQxMCRMRlcuVUJZallRdHJwazhteDEwdVlPRFdBNllRTnFYY0Z4NndjSzhuem1hZlVnTTFmUE0vNiJdLCJzdWIiOiJoYWtpbWluIiwiaWF0IjoxNzczMzAwNjk1LCJleHAiOjE3NzMzMDE1OTV9.OnyqvgVpuPsPQCAojwjymNclQDgU3jiTjr7Jz5gocLfRi39b1FCd1vTRFTeGqHgZ",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/users/me",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "users",
+            "me"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "jwt-demo-refresh",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"refreshToken\": \"eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJoYWtpbWluIiwiaWF0IjoxNzczMjk5NjUxLCJleHAiOjE3NzM5MDQ0NTF9.FpidVXWGng6Ho3NH3_jP0xNjb4qC7qBcWJmd8yqdonqaJi2ar3q-CJf3VQPFhW3o\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/auth/refresh",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "auth",
+            "refresh"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "jwt-demo-logout",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}
