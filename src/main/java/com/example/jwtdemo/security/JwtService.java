@@ -33,27 +33,11 @@ public class JwtService {
 	public String generateAccessToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("roles", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
-		// Implement JWT access token generation logic using the signing key and
-		// expiration time
-		// You can use the JJWT library to create the token
-		return buildToken(claims, userDetails.getUsername(), accessTokenExpiration); // Replace
-																						// with
-																						// actual
-																						// token
-																						// generation
-																						// logic
+		return buildToken(claims, userDetails.getUsername(), accessTokenExpiration);
 	}
 
 	public String generateRefreshToken(UserDetails userDetails) {
-		// Implement JWT refresh token generation logic using the signing key and
-		// expiration time
-		// You can use the JJWT library to create the token
-		return buildToken(new HashMap<>(), userDetails.getUsername(), refreshTokenExpiration); // Replace
-																								// with
-																								// actual
-																								// token
-																								// generation
-																								// logic
+		return buildToken(new HashMap<>(), userDetails.getUsername(), refreshTokenExpiration);
 	}
 
 	private String buildToken(Map<String, Object> claims, String username, long expiration) {
