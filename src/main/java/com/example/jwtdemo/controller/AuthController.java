@@ -2,6 +2,7 @@ package com.example.jwtdemo.controller;
 
 import com.example.jwtdemo.dto.request.LoginRequest;
 import com.example.jwtdemo.dto.request.RefreshTokenRequest;
+import com.example.jwtdemo.dto.request.RegisterRequest;
 import com.example.jwtdemo.dto.response.ApiResponse;
 import com.example.jwtdemo.dto.response.AuthResponse;
 import com.example.jwtdemo.service.AuthService;
@@ -25,6 +26,11 @@ public class AuthController {
 	@PostMapping("/login")
 	public AuthResponse login(@Valid @RequestBody LoginRequest request) {
 		return authService.login(request);
+	}
+
+	@PostMapping("/register")
+	public AuthResponse register(@Valid @RequestBody RegisterRequest request) {
+		return authService.register(request);
 	}
 
 	@PostMapping("/refresh")

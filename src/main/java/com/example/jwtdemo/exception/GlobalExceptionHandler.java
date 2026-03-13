@@ -30,6 +30,12 @@ public class GlobalExceptionHandler {
 		return new ApiResponse(message);
 	}
 
+	@ExceptionHandler(IllegalArgumentException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ApiResponse handleIllegalArgumentException(IllegalArgumentException ex) {
+		return new ApiResponse(ex.getMessage());
+	}
+
 	@ExceptionHandler(Exception.class)
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	public ApiResponse handleGeneralException(Exception ex) {
