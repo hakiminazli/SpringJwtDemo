@@ -17,56 +17,62 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final AuthenticationManager authenticationManager;
-    private final AppUserRepository appUserRepository;
-    private final JwtService jwtService;
-    private final RefreshTokenService refreshTokenService;
+	private final AuthenticationManager authenticationManager;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager, AppUserRepository appUserRepository, JwtService jwtService, RefreshTokenService refreshTokenService) {
-        this.authenticationManager = authenticationManager;
-        this.appUserRepository = appUserRepository;
-        this.jwtService = jwtService;
-        this.refreshTokenService = refreshTokenService;
-    }
+	private final AppUserRepository appUserRepository;
 
-    @Override
-    public AuthResponse login(LoginRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+	private final JwtService jwtService;
 
-        AppUser appUser = appUserRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+	private final RefreshTokenService refreshTokenService;
 
-        UserDetails userDetails = User.builder()
-                .username(appUser.getUsername())
-                .password(appUser.getPassword())
-                .roles(appUser.getPassword())
-                .build();
+	public AuthServiceImpl(AuthenticationManager authenticationManager, AppUserRepository appUserRepository,
+			JwtService jwtService, RefreshTokenService refreshTokenService) {
+		this.authenticationManager = authenticationManager;
+		this.appUserRepository = appUserRepository;
+		this.jwtService = jwtService;
+		this.refreshTokenService = refreshTokenService;
+	}
 
-        String accessToken = jwtService.generateAccessToken(userDetails);
-        String refreshToken = jwtService.generateRefreshToken(userDetails);
+	@Override
+	public AuthResponse login(LoginRequest request) {
+		authenticationManager
+			.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
-        refreshTokenService.createRefreshToken(appUser, refreshToken);
+		AppUser appUser = appUserRepository.findByUsername(request.getUsername())
+			.orElseThrow(() -> new RuntimeException("User not found"));
 
-        return new AuthResponse(accessToken, refreshToken);
-    }
+		UserDetails userDetails = User.builder()
+			.username(appUser.getUsername())
+			.password(appUser.getPassword())
+			.roles(appUser.getPassword())
+			.build();
 
-    @Override
-    public AuthResponse refreshToken(String refreshToken) {
-        RefreshToken savedRefreshToken = refreshTokenService.verifyRefreshToken(refreshToken);
-        AppUser appUser = savedRefreshToken.getUser();
+		String accessToken = jwtService.generateAccessToken(userDetails);
+		String refreshToken = jwtService.generateRefreshToken(userDetails);
 
-        UserDetails userDetails = User.builder()
-                .username(appUser.getUsername())
-                .password(appUser.getPassword())
-                .roles(appUser.getPassword())
-                .build();
+		refreshTokenService.createRefreshToken(appUser, refreshToken);
 
-        String newAccessToken = jwtService.generateAccessToken(userDetails);
-        return new AuthResponse(newAccessToken, refreshToken);
-    }
+		return new AuthResponse(accessToken, refreshToken);
+	}
 
-    @Override
-    public void logout(String refreshToken) {
-        refreshTokenService.revokeRefreshToken(refreshToken);
-    }
+	@Override
+	public AuthResponse refreshToken(String refreshToken) {
+		RefreshToken savedRefreshToken = refreshTokenService.verifyRefreshToken(refreshToken);
+		AppUser appUser = savedRefreshToken.getUser();
+
+		UserDetails userDetails = User.builder()
+			.username(appUser.getUsername())
+			.password(appUser.getPassword())
+			.roles(appUser.getPassword())
+			.build();
+
+		String newAccessToken = jwtService.generateAccessToken(userDetails);
+		return new AuthResponse(newAccessToken, refreshToken);
+	}
+
+	@Override
+	public void logout(String refreshToken) {
+		refreshTokenService.revokeRefreshToken(refreshToken);
+	}
+
 }

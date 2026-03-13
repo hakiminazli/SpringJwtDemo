@@ -14,17 +14,23 @@ import java.util.Collections;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final AppUserRepository appUserRepository;
+	private final AppUserRepository appUserRepository;
 
-    public CustomUserDetailsService(AppUserRepository appUserRepository) {
+	public CustomUserDetailsService(AppUserRepository appUserRepository) {
 
-        this.appUserRepository = appUserRepository;
-    }
+		this.appUserRepository = appUserRepository;
+	}
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        AppUser appUser = appUserRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		AppUser appUser = appUserRepository.findByUsername(username)
+			.orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
-        return User.builder().username(appUser.getUsername()).password(appUser.getPassword()).authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + appUser.getRole()))).build();
-    }
+		return User.builder()
+			.username(appUser.getUsername())
+			.password(appUser.getPassword())
+			.authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + appUser.getRole())))
+			.build();
+	}
+
 }

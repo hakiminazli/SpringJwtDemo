@@ -13,45 +13,47 @@ import java.time.Instant;
 @Service
 public class RefreshTokenServiceImpl implements RefreshTokenService {
 
-    private final RefreshTokenRepository refreshTokenRepository;
+	private final RefreshTokenRepository refreshTokenRepository;
 
-    @Value("${jwt.refresh-token-expiration}")
-    private long refreshTokenExpiration;
+	@Value("${jwt.refresh-token-expiration}")
+	private long refreshTokenExpiration;
 
-    public RefreshTokenServiceImpl(RefreshTokenRepository refreshTokenRepository) {
-        this.refreshTokenRepository = refreshTokenRepository;
-    }
+	public RefreshTokenServiceImpl(RefreshTokenRepository refreshTokenRepository) {
+		this.refreshTokenRepository = refreshTokenRepository;
+	}
 
-    @Override
-    public RefreshToken createRefreshToken(AppUser user, String tokenValue) {
-        RefreshToken refreshToken = refreshTokenRepository.findByUser(user).orElse(new RefreshToken());
+	@Override
+	public RefreshToken createRefreshToken(AppUser user, String tokenValue) {
+		RefreshToken refreshToken = refreshTokenRepository.findByUser(user).orElse(new RefreshToken());
 
-        refreshToken.setUser(user);
-        refreshToken.setToken(tokenValue);
-        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenExpiration));
-        refreshToken.setRevoked(false);
-        return refreshTokenRepository.save(refreshToken);
-    }
+		refreshToken.setUser(user);
+		refreshToken.setToken(tokenValue);
+		refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenExpiration));
+		refreshToken.setRevoked(false);
+		return refreshTokenRepository.save(refreshToken);
+	}
 
-    @Override
-    public RefreshToken verifyRefreshToken(String tokenValue) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(tokenValue).orElseThrow(() -> new TokenRefreshException("Refresh token not found"));
+	@Override
+	public RefreshToken verifyRefreshToken(String tokenValue) {
+		RefreshToken refreshToken = refreshTokenRepository.findByToken(tokenValue)
+			.orElseThrow(() -> new TokenRefreshException("Refresh token not found"));
 
-        if (refreshToken.isRevoked()){
-            throw new TokenRefreshException("Refresh token has been revoked");
-        }
-        if (refreshToken.getExpiryDate().isBefore(Instant.now())){
-            throw new TokenRefreshException("Refresh token has expired");
-        }
-        return refreshToken;
-    }
+		if (refreshToken.isRevoked()) {
+			throw new TokenRefreshException("Refresh token has been revoked");
+		}
+		if (refreshToken.getExpiryDate().isBefore(Instant.now())) {
+			throw new TokenRefreshException("Refresh token has expired");
+		}
+		return refreshToken;
+	}
 
-    @Override
-    public void revokeRefreshToken(String tokenValue) {
-        refreshTokenRepository.findByToken(tokenValue).ifPresent(token -> {
-            token.setRevoked(true);
-            refreshTokenRepository.save(token);
-        });
+	@Override
+	public void revokeRefreshToken(String tokenValue) {
+		refreshTokenRepository.findByToken(tokenValue).ifPresent(token -> {
+			token.setRevoked(true);
+			refreshTokenRepository.save(token);
+		});
 
-    }
+	}
+
 }

@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 @Service
 public interface AuthService {
 
-    AuthResponse login(LoginRequest request);
-    AuthResponse refreshToken(String refreshToken);
-    void logout(String refreshToken);
+	AuthResponse login(LoginRequest request);
+
+	AuthResponse refreshToken(String refreshToken);
+
+	void logout(String refreshToken);
+
 }

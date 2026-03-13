@@ -14,27 +14,28 @@ import java.time.Instant;
 @NoArgsConstructor
 public class RefreshToken {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(nullable = false, unique = true, length = 1000)
-    private String token;
+	@Column(nullable = false, unique = true, length = 1000)
+	private String token;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private AppUser user;
+	@OneToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private AppUser user;
 
-    @Column(nullable = false)
-    private Instant expiryDate;
+	@Column(nullable = false)
+	private Instant expiryDate;
 
-    @Column(nullable = false)
-    private boolean revoked;
+	@Column(nullable = false)
+	private boolean revoked;
 
-    public RefreshToken(String token, AppUser user, Instant expiryDate, boolean revoked) {
-        this.token = token;
-        this.user = user;
-        this.expiryDate = expiryDate;
-        this.revoked = revoked;
-    }
+	public RefreshToken(String token, AppUser user, Instant expiryDate, boolean revoked) {
+		this.token = token;
+		this.user = user;
+		this.expiryDate = expiryDate;
+		this.revoked = revoked;
+	}
+
 }

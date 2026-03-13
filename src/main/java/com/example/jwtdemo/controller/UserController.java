@@ -11,11 +11,9 @@ import java.util.Map;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @GetMapping("/me")
-    public Map<String, Object> getCurrentUser(Authentication authentication){
-        return Map.of(
-                "username", authentication.getName(),
-                "authorities", authentication.getAuthorities()
-        );
-    }
+	@GetMapping("/me")
+	public Map<String, Object> getCurrentUser(Authentication authentication) {
+		return Map.of("username", authentication.getName(), "authorities", authentication.getAuthorities());
+	}
+
 }
