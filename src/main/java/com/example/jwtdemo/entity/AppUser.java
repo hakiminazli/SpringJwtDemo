@@ -1,15 +1,14 @@
 package com.example.jwtdemo.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class AppUser {
 
 	@Id
@@ -24,11 +23,5 @@ public class AppUser {
 
 	@Column(nullable = false)
 	private String role;
-
-	public AppUser(String username, String password, String role) {
-		this.username = username;
-		this.password = password;
-		this.role = role;
-	}
 
 }

@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+	private static final String TOKEN_TYPE_BEARER = "Bearer";
+
 	private final AuthenticationManager authenticationManager;
 
 	private final AppUserRepository appUserRepository;
@@ -52,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
 
 		refreshTokenService.createRefreshToken(appUser, refreshToken);
 
-		return new AuthResponse(accessToken, refreshToken);
+		return new AuthResponse(accessToken, refreshToken, TOKEN_TYPE_BEARER);
 	}
 
 	@Override
@@ -67,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
 			.build();
 
 		String newAccessToken = jwtService.generateAccessToken(userDetails);
-		return new AuthResponse(newAccessToken, refreshToken);
+		return new AuthResponse(newAccessToken, refreshToken, TOKEN_TYPE_BEARER);
 	}
 
 	@Override
